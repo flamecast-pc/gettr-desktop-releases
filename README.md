@@ -1,7 +1,10 @@
-# Gettr Desktop Downloads
+# GETTR Desktop Downloads
 
-Public distribution for Gettr Desktop installers and the Tauri updater manifest.
+Public distribution for GETTR Desktop installers and the Tauri updater manifest.
 This repository holds build outputs only — there is no source code here.
+
+A browser-friendly download page is published from `docs/` at
+[flamecast-pc.github.io/gettr-desktop-releases](https://flamecast-pc.github.io/gettr-desktop-releases/).
 
 ## Download
 
@@ -10,9 +13,14 @@ a new version ships, so they are safe to bookmark, publish, or embed.
 
 | Platform | Download |
 | --- | --- |
-| Windows x64 (MSI) | [Gettr_x64_en-US.msi](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_x64_en-US.msi) |
-| Windows x64 (installer) | [Gettr_x64-setup.exe](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_x64-setup.exe) |
-| macOS (Apple Silicon) | [Gettr_aarch64.dmg](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_aarch64.dmg) |
+| Windows x64 (installer) | [GETTR_Desktop_x64-setup.exe](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_x64-setup.exe) |
+| Windows x64 (MSI) | [GETTR_Desktop_x64_en-US.msi](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_x64_en-US.msi) |
+| macOS (Apple Silicon) | [GETTR_Desktop_aarch64.dmg](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_aarch64.dmg) |
+| macOS (Intel) | [GETTR_Desktop_x86_64.dmg](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_x86_64.dmg) |
+
+macOS ships as two separate packages rather than a universal binary. On Apple
+Silicon, take the Apple Silicon build: the Intel build runs under Rosetta but is
+slower and carries no beauty filter.
 
 Earlier versions are listed under
 [Releases](https://github.com/flamecast-pc/gettr-desktop-releases/releases).
@@ -25,7 +33,7 @@ Every release ships a `SHA256SUMS.txt` covering all version-stamped assets of
 that release:
 
 ```bash
-curl -fsSLO https://github.com/flamecast-pc/gettr-desktop-releases/releases/download/v0.1.8/SHA256SUMS.txt
+curl -fsSLO https://github.com/flamecast-pc/gettr-desktop-releases/releases/download/<tag>/SHA256SUMS.txt
 sha256sum --check SHA256SUMS.txt
 ```
 
@@ -33,7 +41,7 @@ On macOS, use `shasum -a 256 --check` instead of `sha256sum --check`.
 
 The unversioned files linked above are byte-identical copies of the
 version-stamped assets in the same release, so their checksums are the ones
-listed for the corresponding `Gettr_<version>_*` file.
+listed for the corresponding `GETTR_Desktop_<version>_*` file.
 
 ## Automatic updates
 
