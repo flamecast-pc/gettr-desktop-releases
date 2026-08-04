@@ -1,45 +1,45 @@
-# Gettr Desktop 下载
+# Gettr Desktop Downloads
 
-Gettr Desktop 安装包与 Tauri updater 清单的公开分发仓库。本仓库只存放构建产物，
-不包含源码。
+Public distribution for Gettr Desktop installers and the Tauri updater manifest.
+This repository holds build outputs only — there is no source code here.
 
-## 下载
+## Download
 
-下面的地址永久指向最新正式版本，不随版本号变化：
+These links always resolve to the newest stable release. They do not change when
+a new version ships, so they are safe to bookmark, publish, or embed.
 
-| 平台 | 下载 |
+| Platform | Download |
 | --- | --- |
 | Windows x64 (MSI) | [Gettr_x64_en-US.msi](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_x64_en-US.msi) |
-| Windows x64 (安装程序) | [Gettr_x64-setup.exe](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_x64-setup.exe) |
-| macOS Apple Silicon | [Gettr_aarch64.dmg](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_aarch64.dmg) |
+| Windows x64 (installer) | [Gettr_x64-setup.exe](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_x64-setup.exe) |
+| macOS (Apple Silicon) | [Gettr_aarch64.dmg](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/Gettr_aarch64.dmg) |
 
-历史版本见 [Releases](https://github.com/flamecast-pc/gettr-desktop-releases/releases)。
-标记为 pre-release 的版本是内部测试版，不会出现在上面的地址中。
+Earlier versions are listed under
+[Releases](https://github.com/flamecast-pc/gettr-desktop-releases/releases).
+Releases marked as pre-release are internal test builds and are deliberately
+excluded from the links above.
 
-## 校验安装包
+## Verify a download
 
-每个 Release 都带 `SHA256SUMS.txt`，覆盖该版本全部带版本号的资产：
+Every release ships a `SHA256SUMS.txt` covering all version-stamped assets of
+that release:
 
 ```bash
 curl -fsSLO https://github.com/flamecast-pc/gettr-desktop-releases/releases/download/v0.1.8/SHA256SUMS.txt
 sha256sum --check SHA256SUMS.txt
 ```
 
-macOS 上把 `sha256sum --check` 换成 `shasum -a 256 --check`。
+On macOS, use `shasum -a 256 --check` instead of `sha256sum --check`.
 
-## 自动更新
+The unversioned files linked above are byte-identical copies of the
+version-stamped assets in the same release, so their checksums are the ones
+listed for the corresponding `Gettr_<version>_*` file.
 
-已安装的客户端通过 Tauri updater 读取
+## Automatic updates
+
+Installed clients check
 [`latest.json`](https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/latest.json)
-检查更新，并用内置公钥验证更新包签名。更新是整包冷更新，安装前需要先离开房间并停止
-全部媒体源。
-
----
-
-# Gettr Desktop Downloads
-
-Public distribution repository for Gettr Desktop installers and the Tauri updater
-manifest. Build outputs only — no source code here.
-
-The `releases/latest/download/` links above always resolve to the newest stable
-release. Pre-releases are internal test builds and are excluded from them.
+through the Tauri updater and verify the update package signature against a
+public key built into the application. Updates replace the whole application
+rather than patching it, so the client must leave the room and stop every media
+source before installing.
