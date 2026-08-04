@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Download GETTR Desktop</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f6f7f9;
+        --card: #ffffff;
+        --border: #dfe3e8;
+        --text: #16191d;
+        --muted: #5b6470;
+        --accent: #1f6feb;
+        --accent-text: #ffffff;
+        --note-bg: #fff8e6;
+        --note-border: #e8d9a8;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1117;
+          --card: #161b22;
+          --border: #2a313c;
+          --text: #e6edf3;
+          --muted: #9aa4b2;
+          --accent: #4c8dff;
+          --accent-text: #08111f;
+          --note-bg: #1e1a10;
+          --note-border: #453a1c;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 3rem 1.25rem 4rem;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.6;
+      }
+
+      main {
+        max-width: 46rem;
+        margin: 0 auto;
+      }
+
+      header {
+        margin-bottom: 2.5rem;
+      }
+
+      h1 {
+        margin: 0 0 0.35rem;
+        font-size: 1.9rem;
+        letter-spacing: -0.01em;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .downloads {
+        display: grid;
+        gap: 0.85rem;
+      }
+
+      .download {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.1rem 1.25rem;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+      }
+
+      .download h2 {
+        margin: 0 0 0.15rem;
+        font-size: 1.02rem;
+        font-weight: 600;
+      }
+
+      .download p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+
+      .download a {
+        flex-shrink: 0;
+        padding: 0.5rem 1.15rem;
+        background: var(--accent);
+        color: var(--accent-text);
+        border-radius: 7px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .download a:hover,
+      .download a:focus-visible {
+        filter: brightness(1.08);
+      }
+
+      /* Stack every card at once. Left to wrap on its own, only the longest
+         description pushes its button onto a second line, which reads as a
+         broken row rather than a deliberate layout. */
+      @media (max-width: 30rem) {
+        .download {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0.85rem;
+        }
+
+        .download a {
+          text-align: center;
+        }
+      }
+
+      .note {
+        margin-top: 2rem;
+        padding: 1.1rem 1.25rem;
+        background: var(--note-bg);
+        border: 1px solid var(--note-border);
+        border-radius: 10px;
+        font-size: 0.88rem;
+      }
+
+      .note h2 {
+        margin: 0 0 0.6rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+      }
+
+      .note ul {
+        margin: 0;
+        padding-left: 1.15rem;
+      }
+
+      .note li + li {
+        margin-top: 0.5rem;
+      }
+
+      code {
+        padding: 0.1rem 0.35rem;
+        background: color-mix(in srgb, var(--text) 10%, transparent);
+        border-radius: 4px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.85em;
+        overflow-wrap: anywhere;
+      }
+
+      footer {
+        margin-top: 2.5rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      footer a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>GETTR Desktop</h1>
+        <!--
+          The version line is progressive enhancement only. Every download link
+          below is static HTML pointing at releases/latest/download/, so the page
+          keeps working when the GitHub API is unreachable or rate limited.
+        -->
+        <p class="subtitle" id="release-line">
+          Internal test build &middot; these links always resolve to the newest
+          stable release
+        </p>
+      </header>
+
+      <div class="downloads">
+        <div class="download">
+          <div>
+            <h2>macOS &middot; Apple Silicon</h2>
+            <p>M1 and newer</p>
+          </div>
+          <a
+            href="https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_aarch64.dmg"
+            >Download .dmg</a
+          >
+        </div>
+
+        <div class="download">
+          <div>
+            <h2>macOS &middot; Intel</h2>
+            <p>Intel-based Macs. This build has no beauty filter.</p>
+          </div>
+          <a
+            href="https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_x86_64.dmg"
+            >Download .dmg</a
+          >
+        </div>
+
+        <div class="download">
+          <div>
+            <h2>Windows</h2>
+            <p>Windows 10 and 11, 64-bit</p>
+          </div>
+          <a
+            href="https://github.com/flamecast-pc/gettr-desktop-releases/releases/latest/download/GETTR_Desktop_x64-setup.exe"
+            >Download installer</a
+          >
+        </div>
+      </div>
+
+      <section class="note">
+        <h2>Before you install</h2>
+        <ul>
+          <li>
+            <strong>macOS</strong>: these builds are ad-hoc signed and not
+            notarized by Apple, so opening the app normally reports an
+            unidentified developer. Right-click the app in Finder and choose
+            <em>Open</em>, or run
+            <code>xattr -dr com.apple.quarantine "/Applications/GETTR Desktop.app"</code>.
+          </li>
+          <li>
+            <strong>Windows</strong>: the installer is not Authenticode signed
+            yet, so SmartScreen reports an unknown publisher. Choose
+            <em>More info</em> &rarr; <em>Run anyway</em> to continue.
+          </li>
+          <li>
+            <strong>On Apple Silicon, take the Apple Silicon build</strong>. The
+            Intel build runs under Rosetta, but it is slower and has no beauty
+            filter.
+          </li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Checksums and earlier versions are on the
+          <a
+            href="https://github.com/flamecast-pc/gettr-desktop-releases/releases"
+            >Releases page</a
+          >. The app updates itself, so you will not need to come back here.
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      (function () {
+        var line = document.getElementById("release-line");
+        var endpoint =
+          "https://api.github.com/repos/flamecast-pc/gettr-desktop-releases/releases/latest";
+
+        fetch(endpoint, { headers: { Accept: "application/vnd.github+json" } })
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error(String(response.status));
+            }
+            return response.json();
+          })
+          .then(function (release) {
+            if (!release || !release.tag_name) {
+              return;
+            }
+            var published = release.published_at
+              ? new Date(release.published_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })
+              : "";
+            line.textContent =
+              "Internal test build " +
+              release.tag_name +
+              (published ? " · released " + published : "");
+          })
+          .catch(function () {
+            // Leave the static wording in place; the links do not depend on it.
+          });
+      })();
+    </script>
+  </body>
+</html>
