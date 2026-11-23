@@ -20,7 +20,10 @@ a new version ships, so they are safe to bookmark, publish, or embed.
 
 macOS ships as two separate packages rather than a universal binary. On Apple
 Silicon, take the Apple Silicon build: the Intel build runs under Rosetta but is
-slower and carries no beauty filter.
+slower and carries no beauty filter. The download page recommends the build that
+matches the visitor's computer when the browser can tell (Windows always;
+macOS in Chromium-based browsers, and in others when the WebGL renderer names
+the GPU), and the Apple Silicon build otherwise.
 
 Earlier versions are listed under
 [Releases](https://github.com/flamecast-pc/gettr-desktop-releases/releases).

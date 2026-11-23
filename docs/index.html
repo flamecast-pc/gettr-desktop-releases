@@ -113,6 +113,38 @@
         filter: brightness(1.08);
       }
 
+      /* One card is the recommended build for this computer. The others stay
+         fully usable; their buttons only step back to an outline. */
+      .download.recommended {
+        border-color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
+      }
+
+      .download:not(.recommended) a {
+        background: transparent;
+        color: var(--accent);
+        box-shadow: inset 0 0 0 1px var(--accent);
+      }
+
+      .badge {
+        display: inline-block;
+        margin-left: 0.45rem;
+        padding: 0 0.5rem;
+        background: var(--accent);
+        color: var(--accent-text);
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        line-height: 1.5;
+        vertical-align: 0.12em;
+      }
+
+      .pick {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
       /* Stack every card at once. Left to wrap on its own, only the longest
          description pushes its button onto a second line, which reads as a
          broken row rather than a deliberate layout. */
@@ -187,10 +219,26 @@
         </p>
       </header>
 
+      <!--
+        Without the script, or when the browser cannot tell which computer this
+        is, the Apple Silicon build stays recommended: most Macs have Apple
+        silicon, and an Intel Mac refuses the Apple Silicon build outright
+        instead of quietly losing features the way the reverse mistake does.
+      -->
+      <p class="pick" id="pick">
+        Not sure which Mac you have? Open the Apple menu &rarr;
+        <em>About This Mac</em>. If it lists a <em>Chip</em> such as Apple M1,
+        take the Apple Silicon build; if it lists an Intel <em>Processor</em>,
+        take the Intel build.
+      </p>
+
       <div class="downloads">
-        <div class="download">
+        <div class="download recommended" data-build="mac-arm">
           <div>
-            <h2>macOS &middot; Apple Silicon</h2>
+            <h2>
+              macOS &middot; Apple Silicon
+              <span class="badge" id="badge">Recommended</span>
+            </h2>
             <p>M1 and newer</p>
           </div>
           <a
@@ -199,7 +247,7 @@
           >
         </div>
 
-        <div class="download">
+        <div class="download" data-build="mac-intel">
           <div>
             <h2>macOS &middot; Intel</h2>
             <p>Intel-based Macs. This build has no beauty filter.</p>
@@ -210,7 +258,7 @@
           >
         </div>
 
-        <div class="download">
+        <div class="download" data-build="windows">
           <div>
             <h2>Windows</h2>
             <p>Windows 10 and 11, 64-bit</p>
@@ -287,6 +335,117 @@
           })
           .catch(function () {
             // Leave the static wording in place; the links do not depend on it.
+          });
+      })();
+    </script>
+
+    <script>
+      // Recommend the build that matches this computer when the browser can
+      // tell. Progressive enhancement only: the static page already
+      // recommends the Apple Silicon build, and every link works without this.
+      (function () {
+        var detectedCopy = {
+          "mac-arm":
+            "This computer looks like a Mac with Apple silicon, so the Apple Silicon build is recommended.",
+          "mac-intel":
+            "This computer looks like an Intel-based Mac, so the Intel build is recommended.",
+          windows:
+            "This computer looks like a Windows PC, so the Windows installer is recommended.",
+        };
+
+        // Every Mac browser reports "Intel Mac OS X" in its user agent, and
+        // Safari and Firefox expose no CPU architecture at all. The WebGL
+        // renderer still names the GPU: an Apple M-series GPU means Apple
+        // silicon, an Intel, AMD or NVIDIA GPU means an Intel Mac. A masked
+        // name such as "Apple GPU" stays undetected.
+        function guessFromGpu() {
+          try {
+            var canvas = document.createElement("canvas");
+            var gl =
+              canvas.getContext("webgl") ||
+              canvas.getContext("experimental-webgl");
+            if (!gl) {
+              return null;
+            }
+            var info = gl.getExtension("WEBGL_debug_renderer_info");
+            var renderer = String(
+              gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER) ||
+                ""
+            );
+            var lose = gl.getExtension("WEBGL_lose_context");
+            if (lose) {
+              lose.loseContext();
+            }
+            if (/Apple M\d/i.test(renderer)) {
+              return "mac-arm";
+            }
+            if (/Intel|AMD|Radeon|NVIDIA|GeForce/i.test(renderer)) {
+              return "mac-intel";
+            }
+          } catch (error) {
+            // No WebGL: leave the Mac undetected.
+          }
+          return null;
+        }
+
+        function detect() {
+          var nav = window.navigator;
+          var ua = nav.userAgent || "";
+          var hints = nav.userAgentData;
+          var platform = (hints && hints.platform) || nav.platform || "";
+
+          if (/^Win/i.test(platform) || /Windows NT/i.test(ua)) {
+            return Promise.resolve("windows");
+          }
+          // iPadOS also calls itself a Mac; unlike a Mac it has touch points.
+          var mac = /^Mac/i.test(platform) || /Macintosh/i.test(ua);
+          if (!mac || nav.maxTouchPoints > 1) {
+            return Promise.resolve(null);
+          }
+          // Chromium-based browsers (Chrome, Edge and others) report the
+          // architecture over HTTPS.
+          if (hints && typeof hints.getHighEntropyValues === "function") {
+            return hints.getHighEntropyValues(["architecture"]).then(
+              function (values) {
+                if (values.architecture === "arm") {
+                  return "mac-arm";
+                }
+                if (values.architecture === "x86") {
+                  return "mac-intel";
+                }
+                return guessFromGpu();
+              },
+              guessFromGpu
+            );
+          }
+          return Promise.resolve(guessFromGpu());
+        }
+
+        function recommend(build) {
+          var cards = document.querySelectorAll(".download[data-build]");
+          var badge = document.getElementById("badge");
+          for (var i = 0; i < cards.length; i += 1) {
+            var chosen = cards[i].getAttribute("data-build") === build;
+            cards[i].classList.toggle("recommended", chosen);
+            if (chosen) {
+              cards[i].querySelector("h2").appendChild(badge);
+            }
+          }
+          document.getElementById("pick").textContent = detectedCopy[build];
+        }
+
+        detect()
+          .then(function (build) {
+            if (build && detectedCopy[build]) {
+              recommend(build);
+            }
+            document.documentElement.setAttribute(
+              "data-detected",
+              build || "unknown"
+            );
+          })
+          .catch(function () {
+            document.documentElement.setAttribute("data-detected", "unknown");
           });
       })();
     </script>
